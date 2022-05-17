@@ -19,6 +19,13 @@ contract DappCampNFT is ERC721Enumerable, Ownable
     // -- CONSTRUCTORS ----------------------
     constructor() ERC721("DappCamp NFT", "DCAMP") Ownable() { }
 
+    // -- MODIFIERS -------------------------
+    modifier validateClaim(uint256 tokenId)
+    {
+        require(tokenId > 0 && tokenId < MAX_MINTABLE_TOKENS, "Token ID invalid");
+        _;
+    }
+
     // -- METHODS ---------------------------
     function random(string memory input)
     internal
@@ -51,9 +58,8 @@ contract DappCampNFT is ERC721Enumerable, Ownable
 
     function claim(uint256 tokenId)
     public
+    validateClaim(tokenId)
     {
-        require(tokenId > 0 && tokenId < MAX_MINTABLE_TOKENS, "Token ID invalid");
-
         _safeMint(_msgSender(), tokenId);
     }
 }
